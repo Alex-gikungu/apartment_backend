@@ -1,7 +1,6 @@
-# app.py
-
 from flask import Flask
 from flask_migrate import Migrate
+from flask_cors import CORS  # Import CORS
 from models import db
 from routes import routes_blueprint
 from config import Config
@@ -17,6 +16,9 @@ db.init_app(app)
 
 # Initialize Flask-Migrate
 migrate = Migrate(app, db)
+
+# Enable CORS for specific origins and allow credentials
+CORS(app, origins=["http://localhost:5173"], supports_credentials=True)  # Configure CORS
 
 # Register the routes Blueprint
 app.register_blueprint(routes_blueprint)

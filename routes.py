@@ -101,10 +101,10 @@ def create_apartment():
 @routes_blueprint.route('/apartments', methods=['GET'])
 def get_all_apartments():
     try:
-        # Query all apartments from the database
+        print("Fetching all apartments...")  # Debugging
         apartments = Apartment.query.all()
+        print(f"Found {len(apartments)} apartments")  # Debugging
 
-        # Prepare the response data
         apartments_data = []
         for apartment in apartments:
             apartments_data.append({
@@ -112,13 +112,14 @@ def get_all_apartments():
                 "name": apartment.name,
                 "location": apartment.location,
                 "price": apartment.price,
-                "images": apartment.images,  # List of image URLs
+                "images": apartment.images,
                 "description": apartment.description
             })
 
+        print("Returning apartments data:", apartments_data)  # Debugging
         return jsonify({"apartments": apartments_data}), 200
     except Exception as e:
-        print("Error fetching apartments:", str(e))  # Log the error
+        print("Error fetching apartments:", str(e))  # Debugging
         return jsonify({"message": "An error occurred while fetching apartments"}), 500
     
     
@@ -187,3 +188,19 @@ def create_contact():
     db.session.add(new_contact)
     db.session.commit()
     return jsonify({"message": "Contact message sent successfully"}), 201
+
+
+
+@routes_blueprint.route('/apartments/<int:apartment_id>', methods=['DELETE'])
+def delete_apartment(apartment_id):
+    try:
+        # Find the apartment by ID
+        apartment = Apartment.query.get_or_404(apartment_id)
+        
+        # Delete the apartment from the database
+        db.session.delete(apartment)
+        db.session.commit()
+        return jsonify({"message": f"Apartment with ID {apartment_id} deleted successfully"}), 200
+    except Exception as e:
+        print("Error deleting apartment:", str(e))  # Debugging
+        return jsonify({"message": "An error occurred while deleting the apartment"}), 500
