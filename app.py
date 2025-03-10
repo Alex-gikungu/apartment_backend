@@ -7,8 +7,6 @@ from config import Config
 
 # Initialize the Flask app
 app = Flask(__name__)
-
-# Load configuration from config.py
 app.config.from_object(Config)
 
 # Initialize the database with the app
@@ -18,7 +16,7 @@ db.init_app(app)
 migrate = Migrate(app, db)
 
 # Enable CORS for specific origins and allow credentials
-CORS(app, origins=["https://apartment-locator.vercel.app/"], supports_credentials=True)  # Configure CORS
+CORS(app, origins=["http://localhost:5173"], supports_credentials=True)  # Configure CORS
 
 # Register the routes Blueprint
 app.register_blueprint(routes_blueprint)
